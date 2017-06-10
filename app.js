@@ -45,19 +45,26 @@ I respond to commands:
 `;
 
 
-// команда /on  (запрос на доступ)
+// команда /on  (аутентификация)
 function cmdOn(msg) {
 
     let state = user.getUserState(msg.chat.id);
 
-    if (state == undefined || state === USER_PROCESS_LOGGING) {
-        user.addUser(msg.chat.id, USER_PROCESS_LOGGING);
-        msg.reply.text(`${ msg.from.first_name }, input password:`);
-        log.info(`try into user: ${ msg.chat.id }`);
-    } 
-    else if (state == USER_VALID) {
-       msg.reply.text(`${ msg.from.first_name }, you already entered!`); 
+    switch(state) {
+        case undefined:
+            user.addUser(msg.chat.id, USER_PROCESS_LOGGING);
+            msg.reply.text(`${ msg.from.first_name }, input password:`);
+            log.info(`try login user: ${ msg.chat.id }`);
+            break;
+        case USER_PROCESS_LOGGING:
+            msg.reply.text(`${ msg.from.first_name }, you already entered '/on', i wait password`); 
+            break;
+        case USER_VALID:
+            msg.reply.text(`${ msg.from.first_name }, you already valid user, try /help`); 
+            break;
+
     }
+
     return true;
 }
 
@@ -148,7 +155,7 @@ bot.on('text', (msg) => {
 });
 
 bot.on('error', e => {
-   log.error('ОШИБКА:', e.error.message);
+   log.error(e.error.message);
     if (e.error.name === 'FormulaError') {
         e.data.reply.text(e.error.message + ", try /help"); 
     }
