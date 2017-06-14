@@ -14,11 +14,11 @@ Use this token to access the HTTP API:
 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
 */
-require('dotenv').load();
+//require('dotenv').load();
 const TeleBot = require('telebot');
-const log = require('./src/log')(module);
-const calc = require ('./src/formula');
-const Message = require('./src/message');
+const log = require('./log')(module);
+const calc = require ('./formula');
+const Message = require('./message');
 const TELEGRAM_BOT_TOKEN = '313608241:AAFg0FIlwCLULFazSoR_SzCBtH-e1U-EtL4'
 
 const bot = new TeleBot(TELEGRAM_BOT_TOKEN);
