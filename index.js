@@ -1,3 +1,3 @@
 require('dotenv').load();
 require('./src/bot');
-//require('./src/web');
+require('./src/web');
