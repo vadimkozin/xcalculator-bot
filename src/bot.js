@@ -19,9 +19,8 @@ const TeleBot = require('telebot');
 const log = require('./log')(module);
 const calc = require ('./formula');
 const Message = require('./message');
-const TELEGRAM_BOT_TOKEN = '313608241:AAFg0FIlwCLULFazSoR_SzCBtH-e1U-EtL4'
 
-const bot = new TeleBot(TELEGRAM_BOT_TOKEN);
+const bot = new TeleBot(process.env.TELEGRAM_BOT_TOKEN);
 
 bot.on('text', (msg) => { 
 

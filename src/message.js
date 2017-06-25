@@ -33,7 +33,7 @@ class Message {
 
     constructor (msg) {
         this.msg = msg;
-        this.user = new User('./data/users.json');
+        this.user = new User(process.cwd() + process.env.USERS);
         this.state = this.user.getUserState(msg.chat.id);
     }
 
@@ -117,7 +117,7 @@ class Message {
         const msg = this.msg;
 
         if (this.state === USER_PROCESS_LOGGING) {
-            if (msg.text === process.env.PWD_SECRET) {
+            if (msg.text === process.env.USER_PASSWORD) {
                 this.user.setUserState(msg.chat.id, USER_VALID);
                 this.user.saveUsers();
                 msg.reply.text(`Welcome ${ msg.from.first_name }!, i am ready calculate, enter /help`);
