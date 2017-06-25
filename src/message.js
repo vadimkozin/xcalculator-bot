@@ -1,3 +1,7 @@
+/**
+ *  модуль: Message
+ *  + обрабатывает все команды от пользователя
+ */
 const log = require('./log')(module);
 const User = require ('./user').User;
 const USER_PROCESS_LOGGING = require ('./user').USER_PROCESS_LOGGING;
@@ -6,6 +10,7 @@ const BOT_HELP = `
 I understand and can calculate:
 
 - arithmetic operations: +, -, *, /
+- exponentiation (**)
 - brackets ( and )
 For example:
 
@@ -33,11 +38,11 @@ class Message {
     }
 
     /**
-     * Процесс подготовки на вычисление формул
-     * @method process
+     * Процесс подготовки к вычислениям формул
+     * @method process readyToCompute
      * @return true - означает что пользователь валидный и может вводить формулы
      */
-    process() {
+    readyToCompute() {
  
         if (this.replyOnCmd(this.msg)) {  // команды доступны всем 
             return false;

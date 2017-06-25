@@ -1,5 +1,5 @@
 /*
-name: MyCalculatorBot
+name: XCalculator
 username: XCalculatorBot
 
 @BotFather
@@ -14,7 +14,7 @@ Use this token to access the HTTP API:
 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
 */
-//require('dotenv').load();
+
 const TeleBot = require('telebot');
 const log = require('./log')(module);
 const calc = require ('./formula');
@@ -28,11 +28,12 @@ bot.on('text', (msg) => {
     const message = new Message(msg);
 
     // процес прохождения пользователем валидации и обработкаы команд типа /help
-    if (!message.process()) {
+    if (!message.readyToCompute()) {
         return;
     }
 
-    const result = calc(msg.text);    // ожидаем формулу
+    // пользователь валидный и может вводить формулы
+    const result = calc(msg.text);
     log.info(`user: ${ msg.chat.id } do : ${ msg.text } = ${ result }`);
     msg.reply.text(msg.text + "=" + result);    // результат пользователю
     

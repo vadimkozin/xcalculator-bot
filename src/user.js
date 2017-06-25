@@ -61,20 +61,6 @@ module.exports =  {
     USER_VALID
 } 
 
-/*
-let user = new User('./data/users.json');
-//user.readUsers();
-user.print();
-user.addUser(123, USER_PROCESS_LOGGING);
-user.addUser(456, USER_VALID);
-user.saveUsers();
-user.print();
-log (user.getUserState(123));
-log (user.getUserState(456));
-log (user.getUserState(888) === undefined);
-user.delUser(456);
-user.print();
-*/
 
 
 
