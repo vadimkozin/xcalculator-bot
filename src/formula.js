@@ -1,6 +1,6 @@
 /**
- *  модуль: calculateFormula
- *  Вычисление по формуле типа: (10 + 3/4 - 6 + (18/9 -1))
+ *  модуль: formula
+ *  Вычисление выражения типа: (10 + 3/4 - 6 + (18/9 -1))
  *  + (раскрываем скобки)
  *  + вычисляем операции в скобках
  *  + подставляем результат вместо скобок
@@ -18,7 +18,7 @@ function FormulaError(message) {
 function parseRoundBracket(formula) {
     let pattern = /^[0-9\.+\-\*\/\s()]+$/;
     if (!pattern.test(formula)) {
-        throw new FormulaError("you have entered in the formula invalid characters . (valid: 0-9().+/-*)");
+        throw new FormulaError("oops, invalid characters . (valid: 0-9().+/-*)");
     }
 
     let line = "(" + formula + ")";

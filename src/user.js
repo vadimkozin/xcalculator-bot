@@ -1,67 +1,95 @@
 /**
- *  модуль: User
- *  + сохраняет свое состояние в файле
- *  + определяет статус пользователя (USER_VALID, USER_PROCESS_LOGGING)
+ *  модуль: user
+ *  + сохраняет свое состояние в базе и кеше
+ *  + в кеше содержит только коды валидных пользователей (msg.chat.id)
+ *  + к базе обращается при загрузке программы, при удалении и создании пользователя
  */
-const fs = require('fs');
 const log = require('./log')(module);
-const USER_PROCESS_LOGGING = 0; 
-const USER_VALID = 1;
+const q = require('./db/query');
 
 class User {
-    constructor(filename) {
-        this.filename = filename;
-        this.users = {};
+    constructor() {
+        this.users = {};    // только валидные пользователи (содержит: msg.chat.id)
         this.readUsers();
     }
     
+    /**
+     * Загружает в кеш коды валидных пользователей (msg.chat.id)
+     */
     readUsers() {
-        try {
-            let contents = fs.readFileSync(this.filename, 'utf8');
-            this.users = JSON.parse(contents);
-        }
-        catch(e) {
-            if (e.code === 'ENOENT') {
-                this.saveUsers();
+    
+        q.getUserList((err, users) => {
+            if (err) {
+                log.error('ERROR:(%d) %s', err.code, err.message);
+                return;
             }
-        }
+            if (users && users.length > 0) {
+                for (let a of users) {
+                    this.users[a.chatid] = true;    
+                }                
+            }
+            console.log('USERS:', this.users);
+        });
+        
     }
 
-    saveUsers() {
-        fs.writeFileSync(this.filename, JSON.stringify(this.users));
-    }
-
-    addUser(id, stat) {
-        this.users[id] = stat;
-        this.saveUsers();
+    /**
+     * Добавляет пользователя в базу и кеш
+     * @param {Number} chatid пользователя
+     */
+    addUser(chatid) {
+        return new Promise((resolve, reject) => {
+            q.addUser(chatid, (err, user) => {
+                if (err) {
+                    log.error('ERROR:(%s) %s', err.code, err.message);
+                    return reject(err);
+                }
+                if (user) {
+                    this.users[chatid] = Date.now();
+                    //log.info('add user:(%s)', chatid);
+                    resolve(user);
+                }
+            });
+        });
     }
     
-    setUserState(id, stat) {
-        this.addUser(id, stat);
-    }
-    
-    getUserState(id) {
-        return this.users[id];
+    /**
+     * Возвращает пользователя
+     * @param {Number} chatid пользователя 
+     */
+    getUser(chatid) {
+        return this.users[chatid];
     }
 
-    delUser(id) {
-        delete this.users[id];
-        this.saveUsers();
+    /**
+     * Удаление пользователя
+     * @param {Number} chatid пользователя
+     */
+    delUser(chatid) {
+        return new Promise((resolve, reject) => {
+            q.deleteUserByChatid(chatid, (err, user) => {
+                if (err) {
+                    log.error('ERROR:(%s) %s', err.code, err.message);
+                    return reject(err);
+                }
+                if (user) {
+                    delete this.users[chatid];
+                    //log.info('del user:(%s)', chatid);
+                    resolve(user);
+                }
+            });
+        });
     }
 
     print() {
-        console.log(this.users);
+        console.log('users::',this.users);
     }
 
 }
 
 module.exports =  {
     User,
-    USER_PROCESS_LOGGING,
-    USER_VALID
 } 
-
-
 
 
 

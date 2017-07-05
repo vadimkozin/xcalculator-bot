@@ -2,13 +2,13 @@
   "name": "xcalculator-bot",
   "version": "1.0.0",
   "description": "Telegram calculator bot: @XCalcularorBot",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index",
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": "~6.10.3",
+    "node": "~6.11.0",
     "npm": "~3.10.10"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^4.0.0",
+    "mongoose": "^4.10.8",
     "telebot": "^1.2.0",
     "winston": "^2.3.1"
   }
